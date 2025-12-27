@@ -42,26 +42,11 @@ import com.github.joelgodofwar.neg.listeners.UpdateListener;
 import com.github.joelgodofwar.neg.common.PluginLogger;
 import com.github.joelgodofwar.neg.common.error.DetailedErrorReporter;
 import com.github.joelgodofwar.neg.common.error.Report;
-import com.github.joelgodofwar.neg.gui.GUIMoveItem;
 import com.github.joelgodofwar.neg.i18n.Translator;
-import com.github.joelgodofwar.neg.nms.SettingsBook;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_14_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_15_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_16_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_16_R2;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_16_R3;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_17_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_18_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_19_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_19_R2;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_20_R1;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_20_R2;
-import com.github.joelgodofwar.neg.nms.SettingsBook_v1_20_R3;
 import com.github.joelgodofwar.neg.util.Metrics;
 import com.github.joelgodofwar.neg.util.PluginUtils;
 import com.github.joelgodofwar.neg.util.Utils;
 import com.github.joelgodofwar.neg.util.VersionChecker;
-import com.github.joelgodofwar.neg.util.YmlConfiguration;
 
 @SuppressWarnings("unused")
 public class NoEndermanGrief extends JavaPlugin implements Listener{
@@ -80,21 +65,18 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 	/** end update checker variables */
 	public static String daLang;
 	public static boolean cancelbroadcast;
-	public boolean debug;
+	public static boolean debug;
 	File langFile;
 	public FileConfiguration lang;
-	YmlConfiguration config = new YmlConfiguration();
 	YamlConfiguration oldconfig = new YamlConfiguration();
 	boolean colorful_console;
-	private SettingsBook setingsbook;
-	private boolean correctVersion = true;
 	String configVersion = "1.0.6";
 	//String langVersion = "1.0.6";
 	String pluginName = THIS_NAME;
 	Translator lang2;
 	public String jarfilename = this.getFile().getAbsoluteFile().toString();
 	public static DetailedErrorReporter reporter;
-	public PluginLogger LOGGER;
+	public static PluginLogger LOGGER;
 
 	@Override // TODO: onEnable
 	public void onEnable(){
@@ -104,7 +86,6 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		UpdateCheck = getConfig().getBoolean("auto_update_check", true);
 		debug = getConfig().getBoolean("debug", false);
 		daLang = getConfig().getString("lang", "en_US");
-		config = new YmlConfiguration();
 		colorful_console = getConfig().getBoolean("console.colorful_console", true);
 		lang2 = new Translator(daLang, getDataFolder().toString());
 		THIS_NAME = this.getDescription().getName();
@@ -153,11 +134,11 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 				getDataFolder().mkdirs();
 				LOGGER.log("Data Folder Created at " + getDataFolder());
 			}
-			File  file = new File(getDataFolder(), "config.yml");
+			File  file = new File(getDataFolder(), "getConfig().yml");
 			LOGGER.log("" + file);
 			if(!file.exists()){
-				LOGGER.log("config.yml not found, creating!");
-				saveResource("config.yml", true);
+				LOGGER.log("getConfig().yml not found, creating!");
+				saveResource("getConfig().yml", true);
 			}
 		}catch(Exception exception){
 			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
@@ -168,54 +149,54 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		if(checkconfigversion != null){
 			if(!checkconfigversion.equalsIgnoreCase(configVersion)){
 				try {
-					copyFile_Java7(getDataFolder() + "" + File.separatorChar + "config.yml",getDataFolder() + "" + File.separatorChar + "old_config.yml");
+					copyFile_Java7(getDataFolder() + "" + File.separatorChar + "getConfig().yml",getDataFolder() + "" + File.separatorChar + "old_getConfig().yml");
 				} catch (Exception exception) {
 					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_COPY_FILE).error(exception));
 				}
 				try {
-					oldconfig.load(new File(getDataFolder(), "config.yml"));
+					oldconfig.load(new File(getDataFolder(), "getConfig().yml"));
 				} catch (Exception exception) {
-					LOGGER.warn("Could not load config.yml");
+					LOGGER.warn("Could not load getConfig().yml");
 					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 				}
-				saveResource("config.yml", true);
+				saveResource("getConfig().yml", true);
 				try {
-					config.load(new File(getDataFolder(), "config.yml"));
+					getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 				} catch (Exception exception) {
-					LOGGER.warn("Could not load config.yml");
+					LOGGER.warn("Could not load getConfig().yml");
 					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 				}
 				try {
-					oldconfig.load(new File(getDataFolder(), "old_config.yml"));
+					oldconfig.load(new File(getDataFolder(), "old_getConfig().yml"));
 				} catch (Exception exception) {
 					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 				}
-				config.set("auto_update_check", oldconfig.get("auto_update_check", true));
-				config.set("debug", oldconfig.get("debug", false));
-				config.set("lang", oldconfig.get("lang", "en_US"));
-				config.set("console.colorful_console", oldconfig.get("colorful_console", true));
-				config.set("console.longpluginname", oldconfig.get("console.longpluginname", true));
-				config.set("enderman_grief", oldconfig.get("enderman_grief", false));
-				config.set("skeleton_horse_spawn", oldconfig.get("skeleton_horse_spawn", false));
-				config.set("creeper_grief", oldconfig.get("creeper_grief", false));
-				config.set("wandering_trader_spawn", oldconfig.get("wandering_trader", false));
-				config.set("ghast_grief", oldconfig.get("ghast_grief", false));
-				config.set("phantom_spawn", oldconfig.get("phantom_spawn", false));
-				config.set("pillager_patrol_spawn", oldconfig.get("pillager_patrol_spawn", false));
+				getConfig().set("auto_update_check", oldconfig.get("auto_update_check", true));
+				getConfig().set("debug", oldconfig.get("debug", false));
+				getConfig().set("lang", oldconfig.get("lang", "en_US"));
+				getConfig().set("console.colorful_console", oldconfig.get("colorful_console", true));
+				getConfig().set("console.longpluginname", oldconfig.get("console.longpluginname", true));
+				getConfig().set("enderman_grief", oldconfig.get("enderman_grief", false));
+				getConfig().set("skeleton_horse_spawn", oldconfig.get("skeleton_horse_spawn", false));
+				getConfig().set("creeper_grief", oldconfig.get("creeper_grief", false));
+				getConfig().set("wandering_trader_spawn", oldconfig.get("wandering_trader", false));
+				getConfig().set("ghast_grief", oldconfig.get("ghast_grief", false));
+				getConfig().set("phantom_spawn", oldconfig.get("phantom_spawn", false));
+				getConfig().set("pillager_patrol_spawn", oldconfig.get("pillager_patrol_spawn", false));
 				try {
-					config.save(new File(getDataFolder(), "config.yml"));
+					getConfig().save(new File(getDataFolder(), "getConfig().yml"));
 				} catch (Exception exception) {
-					LOGGER.warn("Could not save old settings to config.yml");
+					LOGGER.warn("Could not save old settings to getConfig().yml");
 					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_SAVE_CONFIG).error(exception));
 				}
-				LOGGER.log("config.yml has been updated");
+				LOGGER.log("getConfig().yml has been updated");
 			}
 		}
 		/** end config check */
 		try {
-			config.load(new File(getDataFolder(), "config.yml"));
+			getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 		} catch (Exception exception) {
-			LOGGER.warn("Could not load config.yml");
+			LOGGER.warn("Could not load getConfig().yml");
 			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 		}
 
@@ -282,14 +263,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		getServer().getPluginManager().registerEvents(new GhastListener(this), this);
 		getServer().getPluginManager().registerEvents(new SpawnListener(this), this);
 		getServer().getPluginManager().registerEvents(new UpdateListener(this), this);
-		getServer().getPluginManager().registerEvents(new GUIMoveItem(this), this);  // Comment out for release versions, un comment for Dev builds.
 		consoleInfo(ChatColor.BOLD + "ENABLED" + ChatColor.RESET + " - Loading took " + LoadTime(startTime));
-
-		try {
-			this.correctVersion = this.setupBook();
-		}catch(Exception exception) {
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_BOOK_SETUP_ERROR).error(exception));
-		}
 
 		try {
 			Metrics metrics  = new Metrics(this, 6004);
@@ -378,7 +352,6 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 	@Override // TODO: onDisable
 	public void onDisable(){
 		//saveConfig();
-		config = null;
 		consoleInfo(ChatColor.BOLD + "DISABLED" + ChatColor.RESET);
 	}
 
@@ -944,7 +917,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 						//save_lore.add(ChatColor.AQUA + "Set configs and save.");
 						save_lore.add(ChatColor.YELLOW + "Your current changes");
 						save_lore.add(ChatColor.YELLOW + "will be set and saved");
-						save_lore.add(ChatColor.YELLOW + "to config.yml");
+						save_lore.add(ChatColor.YELLOW + "to getConfig().yml");
 						save_meta.setLore(save_lore);
 						btnSave.setItemMeta(save_meta);
 
@@ -979,21 +952,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 					}
 				}
 
-				if(args[0].equalsIgnoreCase("book")){
-					if(!(sender instanceof Player)) {
-						sender.sendMessage(ChatColor.DARK_RED + "This command can not be sent by console");
-						return false;
-					}
-					if( sender.hasPermission("noendermangrief.admin") ){
-						Player player = (Player) sender;
-						//int a = player.getStatistic(Statistic.TIME_SINCE_REST);
-						player.getWorld().dropItemNaturally(player.getLocation(), setingsbook.giveBook());
-						return true;
-					}else if( !sender.hasPermission("noendermangrief.admin") ){
-						sender.sendMessage(ChatColor.YELLOW + THIS_NAME + ChatColor.RED + " " + get("neg.message.noperm"));
-						return false;
-					}
-				}
+				// BOOK command removed - GUI features no longer supported
 				if(args[0].equalsIgnoreCase("toggledebug")||args[0].equalsIgnoreCase("td")){
 					if( sender.isOp() || sender.hasPermission("noendermangrief.toggledebug") || !(sender instanceof Player) ||
 							sender.hasPermission("noendermangrief.op") || sender.hasPermission("noendermangrief.admin") ){
@@ -1014,60 +973,60 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 						oldconfig = new YamlConfiguration();
 						LOGGER.log("Checking config file version...");
 						try {
-							oldconfig.load(new File(getDataFolder() + "" + File.separatorChar + "config.yml"));
+							oldconfig.load(new File(getDataFolder() + "" + File.separatorChar + "getConfig().yml"));
 						} catch (Exception exception) {
-							LOGGER.warn("Could not load config.yml");
+							LOGGER.warn("Could not load getConfig().yml");
 							reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 						}
 						String checkconfigversion = oldconfig.getString("version", "1.0.0");
 						if(checkconfigversion != null){
 							if(!checkconfigversion.equalsIgnoreCase(configVersion)){
 								try {
-									copyFile_Java7(getDataFolder() + "" + File.separatorChar + "config.yml",getDataFolder() + "" + File.separatorChar + "old_config.yml");
+									copyFile_Java7(getDataFolder() + "" + File.separatorChar + "getConfig().yml",getDataFolder() + "" + File.separatorChar + "old_getConfig().yml");
 								} catch (Exception exception) {
 									reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 								}
-								saveResource("config.yml", true);
+								saveResource("getConfig().yml", true);
 
 								try {
-									config.load(new File(getDataFolder(), "config.yml"));
+									getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 								} catch (Exception exception) {
-									LOGGER.warn("Could not load config.yml");
+									LOGGER.warn("Could not load getConfig().yml");
 									reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 								}
 								try {
-									oldconfig.load(new File(getDataFolder(), "old_config.yml"));
+									oldconfig.load(new File(getDataFolder(), "old_getConfig().yml"));
 								} catch (Exception exception) {
-									LOGGER.warn("Could not load old_config.yml");
+									LOGGER.warn("Could not load old_getConfig().yml");
 									reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 								}
-								config.set("auto_update_check", oldconfig.get("auto_update_check", true));
-								config.set("debug", oldconfig.get("debug", false));
-								config.set("lang", oldconfig.get("lang", "en_US"));
-								config.set("console.colorful_console", oldconfig.get("colorful_console", true));
-								config.set("console.longpluginname", oldconfig.get("console.longpluginname", true));
-								config.set("enderman_grief", oldconfig.get("enderman_grief", false));
-								config.set("skeleton_horse_spawn", oldconfig.get("skeleton_horse_spawn", false));
-								config.set("creeper_grief", oldconfig.get("creeper_grief", false));
-								config.set("wandering_trader_spawn", oldconfig.get("wandering_trader", false));
-								config.set("ghast_grief", oldconfig.get("ghast_grief", false));
-								config.set("phantom_spawn", oldconfig.get("phantom_spawn", false));
-								config.set("pillager_patrol_spawn", oldconfig.get("pillager_patrol_spawn", false));
+								getConfig().set("auto_update_check", oldconfig.get("auto_update_check", true));
+								getConfig().set("debug", oldconfig.get("debug", false));
+								getConfig().set("lang", oldconfig.get("lang", "en_US"));
+								getConfig().set("console.colorful_console", oldconfig.get("colorful_console", true));
+								getConfig().set("console.longpluginname", oldconfig.get("console.longpluginname", true));
+								getConfig().set("enderman_grief", oldconfig.get("enderman_grief", false));
+								getConfig().set("skeleton_horse_spawn", oldconfig.get("skeleton_horse_spawn", false));
+								getConfig().set("creeper_grief", oldconfig.get("creeper_grief", false));
+								getConfig().set("wandering_trader_spawn", oldconfig.get("wandering_trader", false));
+								getConfig().set("ghast_grief", oldconfig.get("ghast_grief", false));
+								getConfig().set("phantom_spawn", oldconfig.get("phantom_spawn", false));
+								getConfig().set("pillager_patrol_spawn", oldconfig.get("pillager_patrol_spawn", false));
 
 								try {
-									config.save(new File(getDataFolder(), "config.yml"));
+									getConfig().save(new File(getDataFolder(), "getConfig().yml"));
 								} catch (Exception exception) {
-									LOGGER.warn("Could not save old settings to config.yml");
+									LOGGER.warn("Could not save old settings to getConfig().yml");
 									reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 								}
 
-								LOGGER.log("config.yml Updated! old config saved as old_config.yml");
-								LOGGER.log("chance_config.yml saved.");
+								LOGGER.log("getConfig().yml Updated! old config saved as old_getConfig().yml");
+								LOGGER.log("chance_getConfig().yml saved.");
 							}else{
 								try {
-									config.load(new File(getDataFolder(), "config.yml"));
+									getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 								} catch (Exception exception) {
-									LOGGER.warn("Could not load config.yml");
+									LOGGER.warn("Could not load getConfig().yml");
 									reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 								}
 							}
@@ -1075,14 +1034,14 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 						}
 						LOGGER.log("Loading config file...");
 						try {
-							getConfig().load(new File(getDataFolder(), "config.yml"));
+							getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 						} catch (Exception exception) {
 							reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 						}
 						try {
-							config.load(new File(getDataFolder(), "config.yml"));
+							getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 						} catch (Exception exception) {
-							LOGGER.warn("Could not load config.yml");
+							LOGGER.warn("Could not load getConfig().yml");
 							reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
 						}
 
@@ -1198,7 +1157,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg eg True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("enderman_grief", Boolean.parseBoolean(args[1]));
+							getConfig().set("enderman_grief", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.enderman.set") + " " + args[1]);
@@ -1208,9 +1167,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.enderman.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1234,7 +1193,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg sh True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("skeleton_horse_spawn", Boolean.parseBoolean(args[1]));
+							getConfig().set("skeleton_horse_spawn", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.skeleton_horse.set") + " " + args[1]);
@@ -1244,9 +1203,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.skeleton_horse.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1270,7 +1229,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg sh True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("wandering_trader_spawn", Boolean.parseBoolean(args[1]));
+							getConfig().set("wandering_trader_spawn", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.wandering_trader.set") + " " + args[1]);
@@ -1280,9 +1239,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.wandering_trader.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1305,7 +1264,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg eg True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("creeper_grief", Boolean.parseBoolean(args[1]));
+							getConfig().set("creeper_grief", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.creeper.set") + " " + args[1]);
@@ -1315,9 +1274,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.creeper.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1341,7 +1300,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg eg True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("ghast_grief", Boolean.parseBoolean(args[1]));
+							getConfig().set("ghast_grief", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.ghast.set") + " " + args[1]);
@@ -1351,9 +1310,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.ghast.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1376,7 +1335,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg eg True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("phantom_spawn", Boolean.parseBoolean(args[1]));
+							getConfig().set("phantom_spawn", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.phantom.set") + " " + args[1]);
@@ -1386,9 +1345,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.phantom.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1411,7 +1370,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.RED + get("neg.var.boolean") + ": /neg eg True/False");
 							return false;
 						}else if(args[1].equalsIgnoreCase("true") || args[1].equalsIgnoreCase("false")){
-							config.set("pillager_patrol_spawn", Boolean.parseBoolean(args[1]));
+							getConfig().set("pillager_patrol_spawn", Boolean.parseBoolean(args[1]));
 							saveConfig();
 
 							sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.pillager_patrol.set") + " " + args[1]);
@@ -1421,9 +1380,9 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 								sender.sendMessage(ChatColor.YELLOW + THIS_NAME + " " + ChatColor.WHITE + get("neg.entity.pillager_patrol.will") );
 							}
 							try {
-								config.load(new File(getDataFolder(), "config.yml"));
+								getConfig().load(new File(getDataFolder(), "getConfig().yml"));
 							} catch (Exception exception) {
-								LOGGER.warn("Could not load config.yml");
+								LOGGER.warn("Could not load getConfig().yml");
 								reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
 							}
 							return true;
@@ -1538,48 +1497,16 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 	@Override
 	public void saveConfig(){
 		try {
-			config.save(new File(getDataFolder(), "config.yml"));
+			getConfig().save(new File(getDataFolder(), "getConfig().yml"));
 		} catch (Exception exception) {
-			LOGGER.warn("Could not save old settings to config.yml");
+			LOGGER.warn("Could not save old settings to getConfig().yml");
 			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_SAVE_CONFIG).error(exception));
 		}
 	}
 
 	public boolean isCorrectVersion(){
-		return correctVersion;
-	}
-	public boolean setupBook(){
-		String packageName = this.getServer().getClass().getPackage().getName();
-		String version = packageName.substring(packageName.lastIndexOf('.') + 1);
-
-		if (version.equals("v1_14_R1")) {
-			setingsbook = new SettingsBook_v1_14_R1();
-		}else if (version.equals("v1_15_R1")) {
-			setingsbook = new SettingsBook_v1_15_R1();
-		}else if (version.equals("v1_16_R1")) {
-			setingsbook = new SettingsBook_v1_16_R1();
-		}else if (version.equals("v1_16_R2")) {
-			setingsbook = new SettingsBook_v1_16_R2();
-		}else if (version.equals("v1_16_R3")) {
-			setingsbook = new SettingsBook_v1_16_R3();
-		}else if (version.equals("v1_17_R1")) {
-			setingsbook = new SettingsBook_v1_17_R1();
-		}else if (version.equals("v1_18_R1")) {
-			setingsbook = new SettingsBook_v1_18_R1();
-		}else if (version.equals("v1_19_R1")) {
-			setingsbook = new SettingsBook_v1_19_R1();
-		}else if (version.equals("v1_19_R2")) {
-			setingsbook = new SettingsBook_v1_19_R2();
-		}else if (version.equals("v1_20_R1")) {
-			setingsbook = new SettingsBook_v1_20_R1();
-		}else if (version.equals("v1_20_R2")) {
-			setingsbook = new SettingsBook_v1_20_R2();
-		}else if (version.equals("v1_20_R3")) {
-			setingsbook = new SettingsBook_v1_20_R3();
-		}
-		// This will return true if the server version was compatible with one of our NMS classes
-		// because if it is, our actionbar would not be null
-		return setingsbook != null;
+		// NMS version checking removed - always return true for Paper API compatibility
+		return true;
 	}
 
 	public boolean saveConfig(boolean update, boolean Debug, boolean Console, boolean Longname, boolean Trader, boolean Pillager, boolean Ender, boolean Ghast, boolean Horse,
@@ -1594,26 +1521,26 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		}else {
 			pluginName = THIS_NAME;
 		}
-		config.set("auto_update_check", update);
-		config.set("debug", Debug);
-		config.set("lang", Lang);
-		config.set("console.colorful_console", Console);
-		config.set("console.longpluginname", Longname);
-		config.set("enderman_grief", Ender);
-		config.set("skeleton_horse_spawn", Horse);
-		config.set("creeper_grief", Creeper);
-		config.set("wandering_trader_spawn", Trader);
-		config.set("ghast_grief", Ghast);
-		config.set("phantom_spawn", Phantom);
-		config.set("pillager_patrol_spawn", Pillager);
+		getConfig().set("auto_update_check", update);
+		getConfig().set("debug", Debug);
+		getConfig().set("lang", Lang);
+		getConfig().set("console.colorful_console", Console);
+		getConfig().set("console.longpluginname", Longname);
+		getConfig().set("enderman_grief", Ender);
+		getConfig().set("skeleton_horse_spawn", Horse);
+		getConfig().set("creeper_grief", Creeper);
+		getConfig().set("wandering_trader_spawn", Trader);
+		getConfig().set("ghast_grief", Ghast);
+		getConfig().set("phantom_spawn", Phantom);
+		getConfig().set("pillager_patrol_spawn", Pillager);
 		try {
-			config.save(new File(getDataFolder(), "config.yml"));
+			getConfig().save(new File(getDataFolder(), "getConfig().yml"));
 		} catch (IOException e) {
-			LOGGER.warn("Could not save settings to config.yml");
+			LOGGER.warn("Could not save settings to getConfig().yml");
 			e.printStackTrace();
 			return false;
 		}
-		LOGGER.log("config.yml has been updated");
+		LOGGER.log("getConfig().yml has been updated");
 		return true;
 	}
 

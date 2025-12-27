@@ -35,12 +35,12 @@ public class ConfigAPI  {
 				e.printStackTrace();
 			}
 	}
-	
+
 	public static void Reloadconfig(Plugin plugin, CommandSender sender){
 		// Load config.
 		FileConfiguration config = plugin.getConfig();
 		String daString = config.getString("debug").replace("'", "") + ",";
-		
+
 		if(daString.contains("true")){
 			NoEndermanGrief.debug = true;
 			//log("debug=true", plugin);
@@ -86,7 +86,7 @@ public class ConfigAPI  {
 		}
 	}
 	public static  void log(String dalog, Plugin plugin){
-		NoEndermanGrief.logger.info(Ansi.YELLOW + "" + plugin.getName() + Ansi.RESET + " " + dalog + Ansi.RESET);
+		NoEndermanGrief.LOGGER.log(Ansi.YELLOW + "" + plugin.getName() + Ansi.RESET + " " + dalog + Ansi.RESET);
 	}
 	public  void logDebug(String dalog, Plugin plugin){
 		log(" " + plugin.getDescription().getVersion() + Ansi.RED + Ansi.BOLD + " [DEBUG] " + Ansi.RESET + dalog, plugin);

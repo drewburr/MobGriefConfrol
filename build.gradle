@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.github.joelgodofwar'
+version = '1.14_1.0.9'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    implementation 'commons-lang:commons-lang:2.6'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+
+    filesMatching('plugin.yml') {
+        expand(
+            'version': project.version
+        )
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+jar {
+    archiveBaseName = 'NoEndermanGrief'
+    archiveVersion = project.version
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from('src/main/resources') {
+        include '**/*'
+    }
+}
