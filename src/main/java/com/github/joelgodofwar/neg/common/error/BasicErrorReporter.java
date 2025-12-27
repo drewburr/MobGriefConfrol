@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import org.bukkit.plugin.Plugin;
 
 import com.github.joelgodofwar.neg.common.error.Report.ReportBuilder;
-import com.github.joelgodofwar.neg.common.refelect.PrettyPrinter;
 
 
 
@@ -95,17 +94,12 @@ public class BasicErrorReporter implements ErrorReporter {
 		if ((parameters != null) && (parameters.length > 0)) {
 			output.println("Parameters: ");
 
-			try {
-				for (Object parameter : parameters) {
-					if (parameter == null) {
-						output.println("[NULL]");
-					} else {
-						output.println(PrettyPrinter.printObject(parameter));
-					}
+			for (Object parameter : parameters) {
+				if (parameter == null) {
+					output.println("[NULL]");
+				} else {
+					output.println(parameter.toString());
 				}
-			} catch (IllegalAccessException e) {
-				// Damn it
-				e.printStackTrace();
 			}
 		}
 	}

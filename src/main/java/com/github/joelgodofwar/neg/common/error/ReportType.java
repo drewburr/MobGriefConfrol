@@ -5,10 +5,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.joelgodofwar.neg.common.refelect.FieldAccessException;
-import com.github.joelgodofwar.neg.common.refelect.FuzzyReflection;
-import com.github.joelgodofwar.neg.common.refelect.fuzzy.FuzzyFieldContract;
-
 
 
 /**
@@ -108,7 +104,7 @@ public class ReportType {
 						return type.reportName = field.getDeclaringClass().getCanonicalName() + "#" + field.getName();
 					}
 				} catch (IllegalAccessException e) {
-					throw new FieldAccessException("Unable to read field " + field, e);
+					throw new RuntimeException("Unable to read field " + field, e);
 				}
 			}
 			throw new IllegalArgumentException("Cannot find report name for " + type);
@@ -133,7 +129,7 @@ public class ReportType {
 				field.setAccessible(true);
 				result.add((ReportType) field.get(null));
 			} catch (IllegalAccessException e) {
-				throw new FieldAccessException("Unable to read field " + field, e);
+				throw new RuntimeException("Unable to read field " + field, e);
 			}
 		}
 		return result.toArray(new ReportType[0]);
@@ -145,10 +141,12 @@ public class ReportType {
 	 * @return All associated report fields.
 	 */
 	private static List<Field> getReportFields(Class<?> clazz) {
-		return FuzzyReflection.fromClass(clazz, true)
-				.getFieldList(FuzzyFieldContract.newBuilder()
-						.requireModifier(Modifier.STATIC)
-						.typeDerivedOf(ReportType.class)
-						.build());
+		List<Field> result = new ArrayList<>();
+		for (Field field : clazz.getDeclaredFields()) {
+			if (Modifier.isStatic(field.getModifiers()) && ReportType.class.isAssignableFrom(field.getType())) {
+				result.add(field);
+			}
+		}
+		return result;
 	}
 }

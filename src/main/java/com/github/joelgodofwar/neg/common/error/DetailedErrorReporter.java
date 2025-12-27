@@ -24,7 +24,6 @@ import org.bukkit.plugin.Plugin;
 import com.github.joelgodofwar.neg.NoEndermanGrief;
 import com.github.joelgodofwar.neg.common.collections.ExpireHashMap;
 import com.github.joelgodofwar.neg.common.error.Report.ReportBuilder;
-import com.github.joelgodofwar.neg.common.refelect.PrettyPrinter;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Primitives;
 
@@ -511,12 +510,8 @@ public class DetailedErrorReporter implements ErrorReporter {
 				getBukkitLogger().log(Level.WARNING, "Cannot convert to a String with Apache: " + ex.getMessage());
 			}
 
-			// Use our custom object printer instead
-			try {
-				return PrettyPrinter.printObject(value, value.getClass(), Object.class);
-			} catch (IllegalAccessException e) {
-				return "[Error: " + e.getMessage() + "]";
-			}
+			// Use simple toString() instead
+			return value.toString();
 		}
 	}
 
