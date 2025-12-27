@@ -25,14 +25,12 @@ import com.github.joelgodofwar.neg.NoEndermanGrief;
 import com.github.joelgodofwar.neg.common.collections.ExpireHashMap;
 import com.github.joelgodofwar.neg.common.error.Report.ReportBuilder;
 import com.github.joelgodofwar.neg.common.refelect.PrettyPrinter;
-import com.github.joelgodofwar.neg.util.Ansi;
-import com.github.joelgodofwar.neg.util.StrUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Primitives;
 
 /**
  * Internal class used to handle exceptions.
- * 
+ *
  * @author Kristian
  */
 public class DetailedErrorReporter implements ErrorReporter {
@@ -81,6 +79,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Create a default error reporting system.
+	 *
 	 * @param plugin - the plugin owner.
 	 */
 	public DetailedErrorReporter(Plugin plugin) {
@@ -89,8 +88,9 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Create a central error reporting system.
-	 * @param plugin - the plugin owner.
-	 * @param prefix - default line prefix.
+	 *
+	 * @param plugin     - the plugin owner.
+	 * @param prefix     - default line prefix.
 	 * @param supportURL - URL to report the error.
 	 */
 	public DetailedErrorReporter(Plugin plugin, String prefix, String supportURL) {
@@ -99,11 +99,12 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Create a central error reporting system.
-	 * @param plugin - the plugin owner.
-	 * @param prefix - default line prefix.
-	 * @param supportURL - URL to report the error.
+	 *
+	 * @param plugin        - the plugin owner.
+	 * @param prefix        - default line prefix.
+	 * @param supportURL    - URL to report the error.
 	 * @param maxErrorCount - number of errors to print before giving up.
-	 * @param LOGGER - current logger.
+	 * @param LOGGER        - current logger.
 	 */
 	public DetailedErrorReporter(Plugin plugin, String prefix, String supportURL, int maxErrorCount, Logger logger) {
 		if (plugin == null) {
@@ -138,6 +139,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Determine if we're using detailed error reporting.
+	 *
 	 * @return TRUE if we are, FALSE otherwise.
 	 */
 	public boolean isDetailedReporting() {
@@ -146,6 +148,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Set whether or not to use detailed error reporting.
+	 *
 	 * @param detailedReporting - TRUE to enable it, FALSE otherwise.
 	 */
 	public void setDetailedReporting(boolean detailedReporting) {
@@ -168,10 +171,12 @@ public class DetailedErrorReporter implements ErrorReporter {
 	}
 
 	/**
-	 * Report a problem with a given method and plugin, ensuring that we don't exceed the maximum number of error reports.
-	 * @param sender - the component that observed this exception.
+	 * Report a problem with a given method and plugin, ensuring that we don't
+	 * exceed the maximum number of error reports.
+	 *
+	 * @param sender     - the component that observed this exception.
 	 * @param methodName - the method name.
-	 * @param error - the error itself.
+	 * @param error      - the error itself.
 	 * @return TRUE if the error was printed, FALSE if it was suppressed.
 	 */
 	public boolean reportMinimalNoSpam(Plugin sender, String methodName, Throwable error) {
@@ -199,8 +204,10 @@ public class DetailedErrorReporter implements ErrorReporter {
 		} else {
 			// Nope - only print the error count occasionally
 			if (isPowerOfTwo(errorCount)) {
-				logger.log(Level.SEVERE, "[" + pluginName + "] Unhandled exception number " + errorCount + " occurred in " +
-						methodName + " for " + pluginName, error);
+				logger.log(Level.SEVERE,
+						"[" + pluginName + "] Unhandled exception number " + errorCount + " occurred in " +
+								methodName + " for " + pluginName,
+						error);
 			}
 			return false;
 		}
@@ -210,6 +217,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 	 * Determine if a given number is a power of two.
 	 * <p>
 	 * That is, if there exists an N such that 2^N = number.
+	 *
 	 * @param number - the number to check.
 	 * @return TRUE if the given number is a power of two, FALSE otherwise.
 	 */
@@ -249,6 +257,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 	 * Determine if we should print the given report.
 	 * <p>
 	 * The default implementation will check for rate limits.
+	 *
 	 * @param report - the report to check.
 	 * @return TRUE if we should print it, FALSE otherwise.
 	 */
@@ -291,6 +300,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve the name of a sender class.
+	 *
 	 * @param sender - sender object.
 	 * @return The name of the sender's class.
 	 */
@@ -361,8 +371,10 @@ public class DetailedErrorReporter implements ErrorReporter {
 		if (plugin != null) {
 			writer.println("Version: " + neg.getName() + " v" + neg.getDescription().getVersion());
 			String jarfilename = neg.getjarfilename();
-			writer.println(addPrefix("jarfilename: " + StrUtils.Right(jarfilename, jarfilename.length() - jarfilename.lastIndexOf(File.separatorChar)), SECOND_LEVEL_PREFIX));
-			//writer.println(addPrefix(plugin.toString(), SECOND_LEVEL_PREFIX));
+			int lastSeparator = jarfilename.lastIndexOf(File.separatorChar);
+			String filename = lastSeparator >= 0 ? jarfilename.substring(lastSeparator + 1) : jarfilename;
+			writer.println(addPrefix("jarfilename: " + filename, SECOND_LEVEL_PREFIX));
+			// writer.println(addPrefix(plugin.toString(), SECOND_LEVEL_PREFIX));
 		}
 
 		writer.println("config.yml:");
@@ -375,27 +387,28 @@ public class DetailedErrorReporter implements ErrorReporter {
 			if ((value != null) && value.toString().contains("MemorySection")) {
 				value = "";
 			}
-			writer.println(addPrefix( key + " = '" + value + "'" , SECOND_LEVEL_PREFIX));
+			writer.println(addPrefix(key + " = '" + value + "'", SECOND_LEVEL_PREFIX));
 		}
 
 		// And java version
 		writer.println("Java Version:	" + System.getProperty("java.version"));
-		//writer.println(addPrefix(System.getProperty("java.version"), SECOND_LEVEL_PREFIX));
+		// writer.println(addPrefix(System.getProperty("java.version"),
+		// SECOND_LEVEL_PREFIX));
 
 		// Add the server version too
 		if (Bukkit.getServer() != null) {
 			writer.println("Server:	");
-			writer.println(addPrefix("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")", SECOND_LEVEL_PREFIX));
+			writer.println(addPrefix("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion()
+					+ " (Implementing API version " + Bukkit.getBukkitVersion() + ")", SECOND_LEVEL_PREFIX));
 			/** add list of all plugins, and their version */
 			writer.println(getPluginList());
-
 
 			// Inform of this occurrence
 			if (isChatWarnings()) {
 				Bukkit.getServer().broadcast(
-						String.format("Error %s (%s) occurred in %s.", report.getReportMessage(), report.getException(), sender),
-						ERROR_PERMISSION
-						);
+						String.format("Error %s (%s) occurred in %s.", report.getReportMessage(), report.getException(),
+								sender),
+						ERROR_PERMISSION);
 			}
 		}
 
@@ -420,6 +433,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Print the call stack to the given logger.
+	 *
 	 * @param logger - the logger.
 	 */
 	private void printCallStack(Level level, Logger logger) {
@@ -432,6 +446,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Print the current call stack.
+	 *
 	 * @param writer - the writer.
 	 */
 	private void printCallStack(PrintWriter writer) {
@@ -458,7 +473,8 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Adds the given prefix to every line in the text.
-	 * @param text - text to modify.
+	 *
+	 * @param text   - text to modify.
 	 * @param prefix - prefix added to every line in the text.
 	 * @return The modified text.
 	 */
@@ -468,6 +484,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve a string representation of the given object.
+	 *
 	 * @param value - object to convert.
 	 * @return String representation.
 	 */
@@ -475,7 +492,8 @@ public class DetailedErrorReporter implements ErrorReporter {
 		// We can't only rely on toString.
 		if (value == null) {
 			return "[NULL]";
-		} if (isSimpleType(value) || (value instanceof Class<?>)) {
+		}
+		if (isSimpleType(value) || (value instanceof Class<?>)) {
 			return value.toString();
 		} else {
 			try {
@@ -488,7 +506,8 @@ public class DetailedErrorReporter implements ErrorReporter {
 			} catch (ThreadDeath | OutOfMemoryError e) {
 				throw e;
 			} catch (Throwable ex) {
-				// Don't use the error logger to log errors in error logging (that could lead to infinite loops)
+				// Don't use the error logger to log errors in error logging (that could lead to
+				// infinite loops)
 				getBukkitLogger().log(Level.WARNING, "Cannot convert to a String with Apache: " + ex.getMessage());
 			}
 
@@ -502,16 +521,21 @@ public class DetailedErrorReporter implements ErrorReporter {
 	}
 
 	/**
-	 * Determine if the given object is a wrapper for a primitive/simple type or not.
+	 * Determine if the given object is a wrapper for a primitive/simple type or
+	 * not.
+	 *
 	 * @param test - the object to test.
-	 * @return TRUE if this object is simple enough to simply be printed, FALSE othewise.
+	 * @return TRUE if this object is simple enough to simply be printed, FALSE
+	 *         othewise.
 	 */
 	protected static boolean isSimpleType(Object test) {
 		return (test instanceof String) || Primitives.isWrapperType(test.getClass());
 	}
 
 	/**
-	 * Retrieve the current number of errors printed through {@link #reportDetailed(Object, Report)}.
+	 * Retrieve the current number of errors printed through
+	 * {@link #reportDetailed(Object, Report)}.
+	 *
 	 * @return Number of errors printed.
 	 */
 	public int getErrorCount() {
@@ -520,6 +544,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Set the number of errors printed.
+	 *
 	 * @param errorCount - new number of errors printed.
 	 */
 	public void setErrorCount(int errorCount) {
@@ -527,7 +552,9 @@ public class DetailedErrorReporter implements ErrorReporter {
 	}
 
 	/**
-	 * Retrieve the maximum number of errors we can print before we begin suppressing errors.
+	 * Retrieve the maximum number of errors we can print before we begin
+	 * suppressing errors.
+	 *
 	 * @return Maximum number of errors.
 	 */
 	public int getMaxErrorCount() {
@@ -535,7 +562,9 @@ public class DetailedErrorReporter implements ErrorReporter {
 	}
 
 	/**
-	 * Set the maximum number of errors we can print before we begin suppressing errors.
+	 * Set the maximum number of errors we can print before we begin suppressing
+	 * errors.
+	 *
 	 * @param maxErrorCount - new max count.
 	 */
 	public void setMaxErrorCount(int maxErrorCount) {
@@ -546,7 +575,8 @@ public class DetailedErrorReporter implements ErrorReporter {
 	 * Adds the given global parameter. It will be included in every error report.
 	 * <p>
 	 * Both key and value must be non-null.
-	 * @param key - name of parameter.
+	 *
+	 * @param key   - name of parameter.
 	 * @param value - the global parameter itself.
 	 */
 	public void addGlobalParameter(String key, Object value) {
@@ -562,6 +592,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve a global parameter by its key.
+	 *
 	 * @param key - key of the parameter to retrieve.
 	 * @return The value of the global parameter, or NULL if not found.
 	 */
@@ -582,6 +613,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve a set of every registered global parameter.
+	 *
 	 * @return Set of all registered global parameters.
 	 */
 	public Set<String> globalParameters() {
@@ -590,6 +622,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve the support URL that will be added to all detailed reports.
+	 *
 	 * @return Support URL.
 	 */
 	public String getSupportURL() {
@@ -598,6 +631,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Set the support URL that will be added to all detailed reports.
+	 *
 	 * @param supportURL - the new support URL.
 	 */
 	public void setSupportURL(String supportURL) {
@@ -606,6 +640,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve the prefix to apply to every line in the error reports.
+	 *
 	 * @return Error report prefix.
 	 */
 	public String getPrefix() {
@@ -614,6 +649,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Set the prefix to apply to every line in the error reports.
+	 *
 	 * @param prefix - new prefix.
 	 */
 	public void setPrefix(String prefix) {
@@ -622,6 +658,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Retrieve the current logger that is used to print all reports.
+	 *
 	 * @return The current logger.
 	 */
 	public Logger getLogger() {
@@ -630,6 +667,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 
 	/**
 	 * Set the current logger that is used to print all reports.
+	 *
 	 * @param logger - new logger.
 	 */
 	public void setLogger(Logger logger) {
@@ -645,11 +683,9 @@ public class DetailedErrorReporter implements ErrorReporter {
 		for (int var4 = 0; var4 < var5; ++var4) {
 			Plugin plugin = var6[var4];
 			if (pluginList.length() > 0) {
-				pluginList.append(Ansi.WHITE);
 				pluginList.append(", ");
 			}
 
-			pluginList.append(plugin.isEnabled() ? Ansi.GREEN : Ansi.RED);
 			pluginList.append(plugin.getDescription().getName());
 			if (plugin.getDescription().getProvides().size() > 0) {
 				pluginList.append(" (").append(String.join(", ", plugin.getDescription().getProvides())).append(")");
@@ -657,7 +693,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 			pluginList.append(" [" + plugin.getDescription().getVersion() + "]");
 		}
 
-		return "Plugins (" + plugins.length + "): " + pluginList.toString() + Ansi.RESET;
+		return "Plugins (" + plugins.length + "): " + pluginList.toString();
 	}
 
 }

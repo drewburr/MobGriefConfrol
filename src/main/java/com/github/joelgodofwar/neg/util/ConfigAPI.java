@@ -79,10 +79,10 @@ public class ConfigAPI  {
 		}
 	}
 	public static  void log(String dalog, Plugin plugin){
-		NoEndermanGrief.LOGGER.log(Ansi.YELLOW + "" + plugin.getName() + Ansi.RESET + " " + dalog + Ansi.RESET);
+		NoEndermanGrief.LOGGER.log(plugin.getName() + " " + dalog);
 	}
 	public  void logDebug(String dalog, Plugin plugin){
-		log(" " + plugin.getDescription().getVersion() + Ansi.RED + Ansi.BOLD + " [DEBUG] " + Ansi.RESET + dalog, plugin);
+		log(" " + plugin.getDescription().getVersion() + " [DEBUG] " + dalog, plugin);
 	}
 	/*
      * this copy(); method copies the specified file from your jar

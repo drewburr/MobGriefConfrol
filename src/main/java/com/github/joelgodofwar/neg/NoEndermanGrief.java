@@ -40,7 +40,6 @@ import com.github.joelgodofwar.neg.common.error.DetailedErrorReporter;
 import com.github.joelgodofwar.neg.common.error.Report;
 import com.github.joelgodofwar.neg.i18n.Translator;
 import com.github.joelgodofwar.neg.util.PluginUtils;
-import com.github.joelgodofwar.neg.util.Utils;
 
 @SuppressWarnings("unused")
 public class NoEndermanGrief extends JavaPlugin implements Listener{
@@ -199,9 +198,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 	}
 
 	public void consoleInfo(String state) {
-		//loading(Ansi.GREEN + "**************************************" + Ansi.RESET);
 		loading(" v" + THIS_VERSION + " is " + state);
-		//loading(Ansi.GREEN + "**************************************" + Ansi.RESET);
 	}
 
 	public void loading(String string) {
