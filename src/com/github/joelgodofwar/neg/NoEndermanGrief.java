@@ -423,7 +423,7 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		try {
 			if (entity.getEntity().getType() == EntityType.CREEPER) {
 				if(!getConfig().getBoolean("creeper_grief", false)){
-					entity.setCancelled(true);
+					entity.blockList().clear();
 				}
 				LOGGER.debug("" + get("neg.entity.creeper.explode") + entity.getLocation().getBlockX() + ", " + entity.getLocation().getBlockZ());
 				return;
