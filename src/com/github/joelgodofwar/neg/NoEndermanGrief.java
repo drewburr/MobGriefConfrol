@@ -21,21 +21,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.SkeletonHorse;
-import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -46,6 +34,11 @@ import org.bukkit.scheduler.BukkitTask;
 import com.github.joelgodofwar.neg.commands.testCommand;
 import com.github.joelgodofwar.neg.common.MinecraftVersion;
 import com.github.joelgodofwar.neg.common.PluginLibrary;
+import com.github.joelgodofwar.neg.listeners.CreeperListener;
+import com.github.joelgodofwar.neg.listeners.EndermanListener;
+import com.github.joelgodofwar.neg.listeners.GhastListener;
+import com.github.joelgodofwar.neg.listeners.SpawnListener;
+import com.github.joelgodofwar.neg.listeners.UpdateListener;
 import com.github.joelgodofwar.neg.common.PluginLogger;
 import com.github.joelgodofwar.neg.common.error.DetailedErrorReporter;
 import com.github.joelgodofwar.neg.common.error.Report;
@@ -74,8 +67,8 @@ import com.github.joelgodofwar.neg.util.YmlConfiguration;
 public class NoEndermanGrief extends JavaPlugin implements Listener{
 	/** Languages: čeština (cs_CZ), Deutsch (de_DE), English (en_US), Español (es_ES), Español (es_MX), Français (fr_FR), Italiano (it_IT), Magyar (hu_HU), 日本語 (ja_JP), 한국어 (ko_KR), Lolcat (lol_US), Melayu (my_MY), Nederlands (nl_NL), Polski (pl_PL), Português (pt_BR), Русский (ru_RU), Svenska (sv_SV), Türkçe (tr_TR), 中文(简体) (zh_CN), 中文(繁體) (zh_TW) */
 	//public final static Logger logger = Logger.getLogger("Minecraft");
-	static String THIS_NAME;
-	static String THIS_VERSION;
+	public static String THIS_NAME;
+	public static String THIS_VERSION;
 	/** update checker variables */
 	public int projectID = 71236; // https://spigotmc.org/resources/71236
 	public String githubURL = "https://github.com/JoelGodOfwar/NoEndermanGrief/raw/master/versions/1.14/versions.xml";
@@ -283,7 +276,12 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		}
 		/** end update checker */
 
-		getServer().getPluginManager().registerEvents(this, this);
+		// Register mob-specific listeners
+		getServer().getPluginManager().registerEvents(new EndermanListener(this), this);
+		getServer().getPluginManager().registerEvents(new CreeperListener(this), this);
+		getServer().getPluginManager().registerEvents(new GhastListener(this), this);
+		getServer().getPluginManager().registerEvents(new SpawnListener(this), this);
+		getServer().getPluginManager().registerEvents(new UpdateListener(this), this);
 		getServer().getPluginManager().registerEvents(new GUIMoveItem(this), this);  // Comment out for release versions, un comment for Dev builds.
 		consoleInfo(ChatColor.BOLD + "ENABLED" + ChatColor.RESET + " - Loading took " + LoadTime(startTime));
 
@@ -397,120 +395,13 @@ public class NoEndermanGrief extends JavaPlugin implements Listener{
 		LOGGER.log(string);
 	}
 
-	@EventHandler
-	public void onEntityChangeBlock(EntityChangeBlockEvent entitye) {
-		//if (!tr.isrunworld(ac.getName(), e.getEntity().getLocation().getWorld().getName()) )
-		//return;
-		try {
-			if (entitye.getEntity() == null) {
-				return;
-			}
+	// Enderman event handler moved to EndermanListener
 
-			if (entitye.getEntity().getType() == EntityType.ENDERMAN) {
-				if(!getConfig().getBoolean("enderman_grief", false)){
-					entitye.setCancelled(true);
-				}
-				LOGGER.debug("" + get("neg.entity.enderman.pickup") + entitye.getBlock().getType() + " at " + entitye.getBlock().getLocation());
-				return;
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_ENDERMAN_GRIEF).error(exception));
-		}
-	}
+	// Creeper and Ghast explosion handlers moved to CreeperListener and GhastListener
 
-	@EventHandler
-	public void onEntityChangeBlock(EntityExplodeEvent entity) {
-		try {
-			if (entity.getEntity().getType() == EntityType.CREEPER) {
-				if(!getConfig().getBoolean("creeper_grief", false)){
-					entity.blockList().clear();
-				}
-				LOGGER.debug("" + get("neg.entity.creeper.explode") + entity.getLocation().getBlockX() + ", " + entity.getLocation().getBlockZ());
-				return;
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_CREEPER_GRIEF).error(exception));
-		}
-		try {
-			if ((entity.getEntity().getType() == EntityType.FIREBALL)  && (((Fireball) entity.getEntity()).getShooter() instanceof Ghast)) {
-				if(!getConfig().getBoolean("ghast_grief", false)){
-					Entity fireball = entity.getEntity();
-					((Fireball) fireball).setIsIncendiary(false);
-					((Fireball) fireball).setYield(0F);
-					entity.setCancelled(true);
-				}
-				LOGGER.debug("" + get("neg.entity.ghast.explode") + entity.getLocation().getBlockX() + ", " + entity.getLocation().getBlockZ());
-				return;
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_GHAST_GRIEF).error(exception));
-		}
-	}
+	// Player join event handler moved to UpdateListener
 
-	@EventHandler
-	public void onPlayerJoinEvent(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-		if( UpdateAvailable && ( player.isOp() || player.hasPermission("noendermangrief.showUpdateAvailable") || player.hasPermission("noendermangrief.admin") ) ){
-			String links = "[\"\",{\"text\":\"<Download>\",\"bold\":true,\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"<DownloadLink>/history\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"<please_update>\"}},{\"text\":\" \",\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"<please_update>\"}},{\"text\":\"| \"},{\"text\":\"<Donate>\",\"bold\":true,\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://ko-fi.com/joelgodofwar\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"<Donate_msg>\"}},{\"text\":\" | \"},{\"text\":\"<Notes>\",\"bold\":true,\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"<DownloadLink>/updates\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":\"<Notes_msg>\"}}]";
-			links = links.replace("<DownloadLink>", DownloadLink).replace("<Download>", get("neg.version.download"))
-					.replace("<Donate>", get("neg.version.donate")).replace("<please_update>", get("neg.version.please_update"))
-					.replace("<Donate_msg>", get("neg.version.donate.message")).replace("<Notes>", get("neg.version.notes"))
-					.replace("<Notes_msg>", get("neg.version.notes.message"));
-			String versions = "" + ChatColor.GRAY + get("neg.version.new_vers") + ": " + ChatColor.GREEN + "{nVers} | " + get("neg.version.old_vers") + ": " + ChatColor.RED + "{oVers}";
-			player.sendMessage("" + ChatColor.GRAY + get("neg.version.message").toString().replace("<MyPlugin>", ChatColor.GOLD + THIS_NAME + ChatColor.GRAY) );
-			Utils.sendJson(player, links);
-			player.sendMessage(versions.replace("{nVers}", UCnewVers).replace("{oVers}", UColdVers));
-		}
-
-		if( player.getDisplayName().equals("JoelYahwehOfWar") ||  player.getDisplayName().equals("JoelGodOfWar") ){
-			player.sendMessage(THIS_NAME + " " + THIS_VERSION + " Hello father!");
-		}
-	}
-
-	@EventHandler
-	public void onCreatureSpawn(CreatureSpawnEvent event){ //onEntitySpawn(EntitySpawnEvent e) {
-		Entity entity = event.getEntity();
-		try {
-			if (entity instanceof SkeletonHorse){
-				if(!getConfig().getBoolean("skeleton_horse_spawn", false)){
-					LOGGER.debug("" + get("neg.entity.skeleton_horse") + event.getLocation());
-					event.setCancelled(true);
-				}
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_SKELETON_HORSE_GRIEF).error(exception));
-		}
-		try {
-			if (entity instanceof WanderingTrader){
-				if(!getConfig().getBoolean("wandering_trader_spawn", false)){
-					LOGGER.debug("" + get("neg.entity.wandering_trader") + event.getLocation());
-					event.setCancelled(true);
-				}
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_WANDERING_TRADER_GRIEF).error(exception));
-		}
-		try {
-			if (entity instanceof Phantom){
-				if(!getConfig().getBoolean("phantom_spawn", false)){
-					LOGGER.debug("" + get("neg.entity.phantom") + event.getLocation());
-					event.setCancelled(true);
-				}
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_PHANTOM_GRIEF).error(exception));
-		}
-		try {
-			if(event.getSpawnReason() == SpawnReason.PATROL) {
-				if(!getConfig().getBoolean("pillager_patrol_spawn", false)){
-					LOGGER.debug("" + get("neg.entity.pillager_patrol") + event.getLocation());
-					event.setCancelled(true);
-				}
-			}
-		}catch (Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.ERROR_HANDLING_PILLAGER_PATROL_GRIEF).error(exception));
-		}
-	}
+	// Creature spawn event handlers moved to SpawnListener
 
 	@SuppressWarnings("static-access")
 	@Override
