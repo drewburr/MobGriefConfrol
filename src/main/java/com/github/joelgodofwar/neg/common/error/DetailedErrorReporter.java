@@ -502,7 +502,7 @@ public class DetailedErrorReporter implements ErrorReporter {
 			} catch (LinkageError ex) {
 				// Apache is probably missing
 				apacheCommonsMissing = true;
-			} catch (ThreadDeath | OutOfMemoryError e) {
+			} catch (OutOfMemoryError e) {
 				throw e;
 			} catch (Throwable ex) {
 				// Don't use the error logger to log errors in error logging (that could lead to
