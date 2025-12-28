@@ -1,6 +1,7 @@
 package com.github.drewburr.mobgriefcontrol.listeners;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ravager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -22,11 +23,15 @@ public class RavagerListener implements Listener {
 			if (event.getEntity().getType() == EntityType.RAVAGER) {
 				if(!plugin.getConfig().getBoolean("do_ravager_destroy_crops", true)){
 					event.setCancelled(true);
+					// Stop the ravager from repeatedly attempting to destroy crops
+					Ravager ravager = (Ravager) event.getEntity();
+					ravager.getPathfinder().stopPathfinding();
+					return;
 				}
 				MobGriefControl.LOGGER.debug("Ravager attempted to destroy crops at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_RAVAGER_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_RAVAGER_GRIEF).error(exception));
 		}
 	}
 }
