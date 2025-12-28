@@ -11,15 +11,7 @@ console:
   longpluginname: true
 # Set if Enderman can pickup blocks. false=no grief
 do_enderman_grief: false
-# Set whether or not Skeleton Horses spawn. false=no grief
-spawn_skeleton_horse: false
 # Set if Creeper explosions can destroy blocks. false=no grief
 do_creeper_grief: false
-# Set if Wandering Traders spawn. false=no spawn
-spawn_wandering_trader: false
 # Set whether Ghast fireball explosions can destroy blocks. false=no grief
 do_ghast_grief: false
-# Set if whether Phantoms spawn. false=no spawn
-spawn_phantom: false
-# Set if Pillager Patrols should spawn. false=no spawn
-spawn_pillager_patrol: false

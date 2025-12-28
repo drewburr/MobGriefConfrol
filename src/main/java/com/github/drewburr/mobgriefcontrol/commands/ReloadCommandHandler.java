@@ -64,12 +64,8 @@ public class ReloadCommandHandler implements CommandHandler {
 				plugin.getConfig().set("lang", oldconfig.get("lang", "en_US"));
 				plugin.getConfig().set("console.longpluginname", oldconfig.get("console.longpluginname", true));
 				plugin.getConfig().set("do_enderman_grief", oldconfig.get("do_enderman_grief", false));
-				plugin.getConfig().set("spawn_skeleton_horse", oldconfig.get("spawn_skeleton_horse", false));
 				plugin.getConfig().set("do_creeper_grief", oldconfig.get("do_creeper_grief", false));
-				plugin.getConfig().set("spawn_wandering_trader", oldconfig.get("wandering_trader", false));
 				plugin.getConfig().set("do_ghast_grief", oldconfig.get("do_ghast_grief", false));
-				plugin.getConfig().set("spawn_phantom", oldconfig.get("spawn_phantom", false));
-				plugin.getConfig().set("spawn_pillager_patrol", oldconfig.get("spawn_pillager_patrol", false));
 
 				try {
 					plugin.getConfig().save(new File(plugin.getDataFolder(), "config.yml"));

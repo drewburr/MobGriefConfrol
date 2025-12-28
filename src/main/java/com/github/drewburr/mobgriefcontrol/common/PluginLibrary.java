@@ -67,15 +67,9 @@ public class PluginLibrary {
 
 	public static final ReportType REPORT_TAB_COMPLETE_ERROR = new ReportType("Error parsing Tab Complete.");
 	public static final ReportType UNHANDLED_COMMAND_ERROR = new ReportType("Command had an Unhandled exception.");
-	public static final ReportType REPORT_BOOK_SETUP_ERROR = new ReportType("Error creating settings book.");
 	public static final ReportType ERROR_HANDLING_ENDERMAN_GRIEF = new ReportType("Error handling Enderman Grief.");
 	public static final ReportType ERROR_HANDLING_CREEPER_GRIEF = new ReportType("Error handling Creeper Grief.");
 	public static final ReportType ERROR_HANDLING_GHAST_GRIEF = new ReportType("Error handling Ghast Grief.");
-	public static final ReportType ERROR_HANDLING_SKELETON_HORSE_GRIEF = new ReportType("Error handling Skeleton_Horse Grief.");
-	public static final ReportType ERROR_HANDLING_WANDERING_TRADER_GRIEF = new ReportType("Error handling Wandering Trader Grief.");
-	public static final ReportType ERROR_HANDLING_PHANTOM_GRIEF = new ReportType("Error handling Phantom Grief.");
-	public static final ReportType ERROR_HANDLING_PILLAGER_PATROL_GRIEF = new ReportType("Error handling Pillager Patrol Grief.");
-	//public static final ReportType ERROR_HANDLING_GHAST_GRIEF = new ReportType("Error handling Ghast Grief.");
 
 	/**
 	 * Gets the MoreMobHeads plugin instance.

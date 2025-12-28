@@ -23,12 +23,8 @@ public class ConfigCommandHandler implements CommandHandler {
 		sender.sendMessage("  lang: " + plugin.getConfig().getString("lang"));
 		sender.sendMessage("  console.longpluginname: " + plugin.getConfig().getBoolean("console.longpluginname"));
 		sender.sendMessage("  do_enderman_grief: " + plugin.getConfig().getBoolean("do_enderman_grief"));
-		sender.sendMessage("  spawn_skeleton_horse: " + plugin.getConfig().getBoolean("spawn_skeleton_horse"));
 		sender.sendMessage("  do_creeper_grief: " + plugin.getConfig().getBoolean("do_creeper_grief"));
-		sender.sendMessage("  spawn_wandering_trader: " + plugin.getConfig().getBoolean("spawn_wandering_trader"));
 		sender.sendMessage("  do_ghast_grief: " + plugin.getConfig().getBoolean("do_ghast_grief"));
-		sender.sendMessage("  spawn_phantom: " + plugin.getConfig().getBoolean("spawn_phantom"));
-		sender.sendMessage("  spawn_pillager_patrol: " + plugin.getConfig().getBoolean("spawn_pillager_patrol"));
 
 		return true;
 	}

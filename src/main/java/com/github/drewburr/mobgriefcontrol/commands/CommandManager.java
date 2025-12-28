@@ -24,12 +24,8 @@ public class CommandManager {
 		registerHandler(new ToggleDebugCommandHandler());
 		registerHandler(new ReloadCommandHandler());
 		registerHandler(new EndermanGriefCommandHandler());
-		registerHandler(new SkeletonHorseCommandHandler());
-		registerHandler(new WanderingTraderCommandHandler());
 		registerHandler(new CreeperGriefCommandHandler());
 		registerHandler(new GhastGriefCommandHandler());
-		registerHandler(new PhantomSpawnCommandHandler());
-		registerHandler(new PillagerPatrolCommandHandler());
 	}
 
 	/**

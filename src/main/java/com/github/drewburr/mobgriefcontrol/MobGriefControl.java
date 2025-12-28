@@ -37,7 +37,6 @@ import com.github.drewburr.mobgriefcontrol.common.PluginLibrary;
 import com.github.drewburr.mobgriefcontrol.listeners.CreeperListener;
 import com.github.drewburr.mobgriefcontrol.listeners.EndermanListener;
 import com.github.drewburr.mobgriefcontrol.listeners.GhastListener;
-import com.github.drewburr.mobgriefcontrol.listeners.SpawnListener;
 import com.github.drewburr.mobgriefcontrol.common.PluginLogger;
 import com.github.drewburr.mobgriefcontrol.common.error.DetailedErrorReporter;
 import com.github.drewburr.mobgriefcontrol.common.error.Report;
@@ -149,12 +148,8 @@ public class MobGriefControl extends JavaPlugin implements Listener{
 				getConfig().set("lang", oldconfig.get("lang", "en_US"));
 				getConfig().set("console.longpluginname", oldconfig.get("console.longpluginname", true));
 				getConfig().set("do_enderman_grief", oldconfig.get("do_enderman_grief", true));
-				getConfig().set("spawn_skeleton_horse", oldconfig.get("spawn_skeleton_horse", true));
 				getConfig().set("do_creeper_grief", oldconfig.get("do_creeper_grief", true));
-				getConfig().set("spawn_wandering_trader", oldconfig.get("wandering_trader", true));
 				getConfig().set("do_ghast_grief", oldconfig.get("do_ghast_grief", true));
-				getConfig().set("spawn_phantom", oldconfig.get("spawn_phantom", true));
-				getConfig().set("spawn_pillager_patrol", oldconfig.get("spawn_pillager_patrol", true));
 				try {
 					getConfig().save(new File(getDataFolder(), "config.yml"));
 				} catch (Exception exception) {
@@ -179,19 +174,14 @@ getConfig().load(new File(getDataFolder(), "config.yml"));
 
 			LOGGER.debug("console.longpluginname=" + getConfig().getBoolean("console.longpluginname"));
 			LOGGER.debug("do_enderman_grief=" + getConfig().getBoolean("do_enderman_grief"));
-			LOGGER.debug("spawn_skeleton_horse=" + getConfig().getBoolean("spawn_skeleton_horse"));
 			LOGGER.debug("do_creeper_grief=" + getConfig().getBoolean("do_creeper_grief"));
-			LOGGER.debug("spawn_wandering_trader=" + getConfig().getBoolean("spawn_wandering_trader"));
 			LOGGER.debug("do_ghast_grief=" + getConfig().getBoolean("do_ghast_grief"));
-			LOGGER.debug("spawn_phantom=" + getConfig().getBoolean("spawn_phantom"));
-			LOGGER.debug("spawn_pillager_patrol=" + getConfig().getBoolean("spawn_pillager_patrol"));
 		}
 
 		// Register mob-specific listeners
 		getServer().getPluginManager().registerEvents(new EndermanListener(this), this);
 		getServer().getPluginManager().registerEvents(new CreeperListener(this), this);
 		getServer().getPluginManager().registerEvents(new GhastListener(this), this);
-		getServer().getPluginManager().registerEvents(new SpawnListener(this), this);
 
 		// Initialize command manager
 		commandManager = new CommandManager();
@@ -287,8 +277,7 @@ getConfig().load(new File(getDataFolder(), "config.yml"));
 		return true;
 	}
 
-	public boolean saveConfig(boolean update, boolean Debug, boolean Console, boolean Longname, boolean Trader, boolean Pillager, boolean Ender, boolean Ghast, boolean Horse,
-			boolean Phantom, boolean Creeper, String Lang) {
+	public boolean saveConfig(boolean update, boolean Debug, boolean Console, boolean Longname, boolean Ender, boolean Ghast, boolean Creeper, String Lang) {
 		//	debug	daLang	colorful_console
 		debug = Debug;
 		daLang = Lang;
@@ -301,12 +290,8 @@ getConfig().load(new File(getDataFolder(), "config.yml"));
 		getConfig().set("lang", Lang);
 		getConfig().set("console.longpluginname", Longname);
 		getConfig().set("do_enderman_grief", Ender);
-		getConfig().set("spawn_skeleton_horse", Horse);
 		getConfig().set("do_creeper_grief", Creeper);
-		getConfig().set("spawn_wandering_trader", Trader);
 		getConfig().set("do_ghast_grief", Ghast);
-		getConfig().set("spawn_phantom", Phantom);
-		getConfig().set("spawn_pillager_patrol", Pillager);
 		try {
 			getConfig().save(new File(getDataFolder(), "config.yml"));
 		} catch (IOException e) {

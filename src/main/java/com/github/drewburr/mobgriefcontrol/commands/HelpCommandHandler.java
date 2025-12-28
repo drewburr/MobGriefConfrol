@@ -39,12 +39,8 @@ public class HelpCommandHandler implements CommandHandler {
 				sender.sendMessage(" /mobgriefcontrol BOOK - " + plugin.get("mobgriefcontrol.command.book"));
 			}
 			sender.sendMessage(" /mobgriefcontrol endermangrief true/false - " + plugin.get("mobgriefcontrol.command.endermen"));
-			sender.sendMessage(" /mobgriefcontrol skeletonhorse true/false - " + plugin.get("mobgriefcontrol.command.skeleton_horse"));
 			sender.sendMessage(" /mobgriefcontrol creepergrief true/false - " + plugin.get("mobgriefcontrol.command.creeper"));
-			sender.sendMessage(" /mobgriefcontrol wanderingtrader true/false - " + plugin.get("mobgriefcontrol.command.wandering_trader"));
 			sender.sendMessage(" /mobgriefcontrol ghastgrief true/false - " + plugin.get("mobgriefcontrol.command.ghast"));
-			sender.sendMessage(" /mobgriefcontrol phantomgrief true/false - " + plugin.get("mobgriefcontrol.command.phantom"));
-			sender.sendMessage(" /mobgriefcontrol pillagerpatrol true/false - " + plugin.get("mobgriefcontrol.command.pillager_patrol"));
 		}
 
 		sender.sendMessage("[]===============[" + "MobGriefControl" + "]===============[]");
