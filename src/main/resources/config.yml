@@ -1,5 +1,5 @@
 # DO NOT CHANGE VERSION
-version: 1.0.6
+version: 2.0.0
 # set to true before sending a log about an issue.
 # logs trace data required to pinpoint where errors are.
 debug: false
@@ -9,9 +9,31 @@ lang: en_US
 console:
 # Should mobgriefcontrol use it's full name or mobgriefcontrol in console messages?
   longpluginname: true
-# Set if Enderman can pickup blocks. false=no grief
-do_enderman_grief: false
-# Set if Creeper explosions can destroy blocks. false=no grief
-do_creeper_grief: false
-# Set whether Ghast fireball explosions can destroy blocks. false=no grief
-do_ghast_grief: false
+# Set if Enderman can pickup blocks. false=no pickup
+do_enderman_pickup: true
+# Set if Creeper explosions can destroy blocks. false=no explosions
+do_creeper_explode: true
+# Set if Ghast fireball explosions can destroy blocks. false=no explosions
+do_ghast_explode: true
+# Set if Wither can destroy blocks. false=no explosions
+do_wither_explode: true
+# Set if Ender Dragon can destroy blocks. false=no destruction
+do_dragon_destroy: true
+# Set if Zombies can break doors. false=no door breaking
+do_zombie_break_doors: true
+# Set if Villagers can farm/pickup items. false=no farming
+do_villager_farm: true
+# Set if Sheep can eat grass. false=no eating
+do_sheep_eat_grass: true
+# Set if Rabbits can eat crops. false=no eating
+do_rabbit_eat_crops: true
+# Set if Foxes can pickup items. false=no pickup
+do_fox_pickup_items: true
+# Set if Snow Golems leave snow trails. false=no trail
+do_snowgolem_snow_trail: true
+# Set if Silverfish can infest blocks. false=no infesting
+do_silverfish_infest_blocks: true
+# Set if Ravagers can destroy crops. false=no destruction
+do_ravager_destroy_crops: true
+# Set if End Crystals can destroy blocks. false=no explosions
+do_endcrystal_explode: true
