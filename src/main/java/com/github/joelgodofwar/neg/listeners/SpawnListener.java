@@ -28,7 +28,7 @@ public class SpawnListener implements Listener {
 		try {
 			if (entity instanceof SkeletonHorse) {
 				if(!plugin.getConfig().getBoolean("skeleton_horse_spawn", false)){
-					plugin.LOGGER.debug("" + plugin.get("neg.entity.skeleton_horse") + event.getLocation());
+					NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.skeleton_horse") + event.getLocation());
 					event.setCancelled(true);
 				}
 			}
@@ -40,7 +40,7 @@ public class SpawnListener implements Listener {
 		try {
 			if (entity instanceof WanderingTrader) {
 				if(!plugin.getConfig().getBoolean("wandering_trader_spawn", false)){
-					plugin.LOGGER.debug("" + plugin.get("neg.entity.wandering_trader") + event.getLocation());
+					NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.wandering_trader") + event.getLocation());
 					event.setCancelled(true);
 				}
 			}
@@ -52,7 +52,7 @@ public class SpawnListener implements Listener {
 		try {
 			if (entity instanceof Phantom) {
 				if(!plugin.getConfig().getBoolean("phantom_spawn", false)){
-					plugin.LOGGER.debug("" + plugin.get("neg.entity.phantom") + event.getLocation());
+					NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.phantom") + event.getLocation());
 					event.setCancelled(true);
 				}
 			}
@@ -64,7 +64,7 @@ public class SpawnListener implements Listener {
 		try {
 			if(event.getSpawnReason() == SpawnReason.PATROL) {
 				if(!plugin.getConfig().getBoolean("pillager_patrol_spawn", false)){
-					plugin.LOGGER.debug("" + plugin.get("neg.entity.pillager_patrol") + event.getLocation());
+					NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.pillager_patrol") + event.getLocation());
 					event.setCancelled(true);
 				}
 			}

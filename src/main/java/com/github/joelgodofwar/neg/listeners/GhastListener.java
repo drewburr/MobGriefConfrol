@@ -29,7 +29,7 @@ public class GhastListener implements Listener {
 					((Fireball) fireball).setYield(0F);
 					event.setCancelled(true);
 				}
-				plugin.LOGGER.debug("" + plugin.get("neg.entity.ghast.explode") + event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
+				NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.ghast.explode") + event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
 				return;
 			}
 		} catch (Exception exception) {

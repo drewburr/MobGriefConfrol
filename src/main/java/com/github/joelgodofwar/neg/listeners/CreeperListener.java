@@ -23,7 +23,7 @@ public class CreeperListener implements Listener {
 				if(!plugin.getConfig().getBoolean("creeper_grief", false)){
 					event.blockList().clear();
 				}
-				plugin.LOGGER.debug("" + plugin.get("neg.entity.creeper.explode") + event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
+				NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.creeper.explode") + event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
 				return;
 			}
 		} catch (Exception exception) {

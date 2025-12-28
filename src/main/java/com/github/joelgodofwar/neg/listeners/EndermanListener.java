@@ -27,7 +27,7 @@ public class EndermanListener implements Listener {
 				if(!plugin.getConfig().getBoolean("enderman_grief", false)){
 					event.setCancelled(true);
 				}
-				plugin.LOGGER.debug("" + plugin.get("neg.entity.enderman.pickup") + event.getBlock().getType() + " at " + event.getBlock().getLocation());
+				NoEndermanGrief.LOGGER.debug("" + plugin.get("neg.entity.enderman.pickup") + event.getBlock().getType() + " at " + event.getBlock().getLocation());
 				return;
 			}
 		} catch (Exception exception) {
