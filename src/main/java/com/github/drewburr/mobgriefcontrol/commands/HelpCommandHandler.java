@@ -35,9 +35,6 @@ public class HelpCommandHandler implements CommandHandler {
 
 		if (sender.hasPermission("mobgriefcontrol.admin") || !(sender instanceof Player)) {
 			sender.sendMessage(" -<[" + " Admin Commands " + "}>-");
-			if (sender instanceof Player) {
-				sender.sendMessage(" /mobgriefcontrol BOOK - " + plugin.get("mobgriefcontrol.command.book"));
-			}
 			sender.sendMessage(" /mobgriefcontrol endermangrief true/false - " + plugin.get("mobgriefcontrol.command.endermen"));
 			sender.sendMessage(" /mobgriefcontrol creepergrief true/false - " + plugin.get("mobgriefcontrol.command.creeper"));
 			sender.sendMessage(" /mobgriefcontrol ghastgrief true/false - " + plugin.get("mobgriefcontrol.command.ghast"));
