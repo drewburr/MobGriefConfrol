@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.github.drewburr'
-version = '1.14_1.0.9'
+version = '2.0.0'
 
 repositories {
     mavenCentral()
