@@ -88,7 +88,7 @@ You can edit `plugins/MobGriefControl/config.yml` directly or use in-game comman
 Example configuration:
 
 ```yaml
-version: 2.0.0
+version: 2.0.1
 debug: false
 lang: en_US
 auto_update_check: true
