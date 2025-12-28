@@ -21,7 +21,7 @@ public class VillagerListener implements Listener {
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.VILLAGER) {
-				if(!plugin.getConfig().getBoolean("do_villager_farm", true)){
+				if (!plugin.getConfig().getBoolean("do_villager_farm", true)) {
 					event.setCancelled(true);
 					// Stop the villager from repeatedly attempting to pickup items
 					Villager villager = (Villager) event.getEntity();
@@ -31,7 +31,8 @@ public class VillagerListener implements Listener {
 				MobGriefControl.LOGGER.debug("Villager attempted to pickup item at " + event.getItem().getLocation());
 			}
 		} catch (Exception exception) {
-			MobGriefControl.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_VILLAGER_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_VILLAGER_GRIEF).error(exception));
 		}
 	}
 }

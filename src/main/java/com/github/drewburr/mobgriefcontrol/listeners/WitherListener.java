@@ -20,15 +20,16 @@ public class WitherListener implements Listener {
 	public void onEntityExplode(EntityExplodeEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.WITHER ||
-			    event.getEntity().getType() == EntityType.WITHER_SKULL) {
-				if(!plugin.getConfig().getBoolean("do_wither_explode", true)){
+					event.getEntity().getType() == EntityType.WITHER_SKULL) {
+				if (!plugin.getConfig().getBoolean("do_wither_explode", true)) {
 					event.blockList().clear();
 				}
 				MobGriefControl.LOGGER.debug("Wither attempted to explode at " + event.getLocation());
 				return;
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_WITHER_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_WITHER_GRIEF).error(exception));
 		}
 	}
 }

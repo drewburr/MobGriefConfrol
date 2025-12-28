@@ -24,14 +24,16 @@ public class EndermanListener implements Listener {
 			}
 
 			if (event.getEntity().getType() == EntityType.ENDERMAN) {
-				if(!plugin.getConfig().getBoolean("do_enderman_pickup", true)){
+				if (!plugin.getConfig().getBoolean("do_enderman_pickup", true)) {
 					event.setCancelled(true);
 				}
-				MobGriefControl.LOGGER.debug("" + plugin.get("mobgriefcontrol.entity.enderman.pickup") + event.getBlock().getType() + " at " + event.getBlock().getLocation());
+				MobGriefControl.LOGGER.debug("" + plugin.get("mobgriefcontrol.entity.enderman.pickup")
+						+ event.getBlock().getType() + " at " + event.getBlock().getLocation());
 				return;
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_ENDERMAN_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_ENDERMAN_GRIEF).error(exception));
 		}
 	}
 }

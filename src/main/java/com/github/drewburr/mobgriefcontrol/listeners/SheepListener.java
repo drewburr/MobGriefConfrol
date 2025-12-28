@@ -20,13 +20,14 @@ public class SheepListener implements Listener {
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.SHEEP) {
-				if(!plugin.getConfig().getBoolean("do_sheep_eat_grass", true)){
+				if (!plugin.getConfig().getBoolean("do_sheep_eat_grass", true)) {
 					event.setCancelled(true);
 				}
 				MobGriefControl.LOGGER.debug("Sheep attempted to eat grass at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_SHEEP_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_SHEEP_GRIEF).error(exception));
 		}
 	}
 }

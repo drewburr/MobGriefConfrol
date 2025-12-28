@@ -20,14 +20,16 @@ public class CreeperListener implements Listener {
 	public void onEntityExplode(EntityExplodeEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.CREEPER) {
-				if(!plugin.getConfig().getBoolean("do_creeper_explode", true)){
+				if (!plugin.getConfig().getBoolean("do_creeper_explode", true)) {
 					event.blockList().clear();
 				}
-				MobGriefControl.LOGGER.debug("" + plugin.get("mobgriefcontrol.entity.creeper.explode") + event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
+				MobGriefControl.LOGGER.debug("" + plugin.get("mobgriefcontrol.entity.creeper.explode")
+						+ event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
 				return;
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_CREEPER_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_CREEPER_GRIEF).error(exception));
 		}
 	}
 }

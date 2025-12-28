@@ -20,15 +20,16 @@ public class ZombieListener implements Listener {
 	public void onEntityBreakDoor(EntityBreakDoorEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.ZOMBIE ||
-			    event.getEntity().getType() == EntityType.ZOMBIE_VILLAGER ||
-			    event.getEntity().getType() == EntityType.ZOMBIFIED_PIGLIN) {
-				if(!plugin.getConfig().getBoolean("do_zombie_break_doors", true)){
+					event.getEntity().getType() == EntityType.ZOMBIE_VILLAGER ||
+					event.getEntity().getType() == EntityType.ZOMBIFIED_PIGLIN) {
+				if (!plugin.getConfig().getBoolean("do_zombie_break_doors", true)) {
 					event.setCancelled(true);
 				}
 				MobGriefControl.LOGGER.debug("Zombie attempted to break door at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_ZOMBIE_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_ZOMBIE_GRIEF).error(exception));
 		}
 	}
 }

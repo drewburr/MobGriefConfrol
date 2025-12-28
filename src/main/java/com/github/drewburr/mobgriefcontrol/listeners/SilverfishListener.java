@@ -21,17 +21,19 @@ public class SilverfishListener implements Listener {
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.SILVERFISH) {
-				if(!plugin.getConfig().getBoolean("do_silverfish_infest_blocks", true)){
+				if (!plugin.getConfig().getBoolean("do_silverfish_infest_blocks", true)) {
 					event.setCancelled(true);
 					// Stop the silverfish from repeatedly attempting to infest blocks
 					Silverfish silverfish = (Silverfish) event.getEntity();
 					silverfish.getPathfinder().stopPathfinding();
 					return;
 				}
-				MobGriefControl.LOGGER.debug("Silverfish attempted to enter/exit block at " + event.getBlock().getLocation());
+				MobGriefControl.LOGGER
+						.debug("Silverfish attempted to enter/exit block at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			MobGriefControl.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_SILVERFISH_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_SILVERFISH_GRIEF).error(exception));
 		}
 	}
 }

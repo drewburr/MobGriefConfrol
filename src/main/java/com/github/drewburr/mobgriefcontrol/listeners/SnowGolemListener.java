@@ -20,13 +20,15 @@ public class SnowGolemListener implements Listener {
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.SNOWMAN) {
-				if(!plugin.getConfig().getBoolean("do_snowgolem_snow_trail", true)){
+				if (!plugin.getConfig().getBoolean("do_snowgolem_snow_trail", true)) {
 					event.setCancelled(true);
 				}
-				MobGriefControl.LOGGER.debug("Snow Golem attempted to create snow at " + event.getBlock().getLocation());
+				MobGriefControl.LOGGER
+						.debug("Snow Golem attempted to create snow at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			MobGriefControl.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_SNOWGOLEM_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_SNOWGOLEM_GRIEF).error(exception));
 		}
 	}
 }

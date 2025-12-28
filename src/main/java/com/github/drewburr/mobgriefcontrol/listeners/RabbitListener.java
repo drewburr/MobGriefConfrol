@@ -20,13 +20,14 @@ public class RabbitListener implements Listener {
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.RABBIT) {
-				if(!plugin.getConfig().getBoolean("do_rabbit_eat_crops", true)){
+				if (!plugin.getConfig().getBoolean("do_rabbit_eat_crops", true)) {
 					event.setCancelled(true);
 				}
 				MobGriefControl.LOGGER.debug("Rabbit attempted to eat crops at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			plugin.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_RABBIT_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_RABBIT_GRIEF).error(exception));
 		}
 	}
 }

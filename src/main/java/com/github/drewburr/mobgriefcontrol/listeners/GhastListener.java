@@ -22,8 +22,9 @@ public class GhastListener implements Listener {
 	@EventHandler
 	public void onEntityExplode(EntityExplodeEvent event) {
 		try {
-			if ((event.getEntity().getType() == EntityType.FIREBALL) && (((Fireball) event.getEntity()).getShooter() instanceof Ghast)) {
-				if(!plugin.getConfig().getBoolean("do_ghast_explode", true)){
+			if ((event.getEntity().getType() == EntityType.FIREBALL)
+					&& (((Fireball) event.getEntity()).getShooter() instanceof Ghast)) {
+				if (!plugin.getConfig().getBoolean("do_ghast_explode", true)) {
 					// Clear blocks and prevent fire, but allow explosion sound/effect
 					event.blockList().clear();
 					event.setYield(0F);
@@ -33,11 +34,13 @@ public class GhastListener implements Listener {
 						((Fireball) fireball).setIsIncendiary(false);
 					}
 				}
-				MobGriefControl.LOGGER.debug("" + plugin.get("mobgriefcontrol.entity.ghast.explode") + event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
+				MobGriefControl.LOGGER.debug("" + plugin.get("mobgriefcontrol.entity.ghast.explode")
+						+ event.getLocation().getBlockX() + ", " + event.getLocation().getBlockZ());
 				return;
 			}
 		} catch (Exception exception) {
-			MobGriefControl.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_GHAST_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_GHAST_GRIEF).error(exception));
 		}
 	}
 }

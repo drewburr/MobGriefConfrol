@@ -21,7 +21,7 @@ public class RavagerListener implements Listener {
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		try {
 			if (event.getEntity().getType() == EntityType.RAVAGER) {
-				if(!plugin.getConfig().getBoolean("do_ravager_destroy_crops", true)){
+				if (!plugin.getConfig().getBoolean("do_ravager_destroy_crops", true)) {
 					event.setCancelled(true);
 					// Stop the ravager from repeatedly attempting to destroy crops
 					Ravager ravager = (Ravager) event.getEntity();
@@ -31,7 +31,8 @@ public class RavagerListener implements Listener {
 				MobGriefControl.LOGGER.debug("Ravager attempted to destroy crops at " + event.getBlock().getLocation());
 			}
 		} catch (Exception exception) {
-			MobGriefControl.reporter.reportDetailed(plugin, Report.newBuilder(PluginLibrary.ERROR_HANDLING_RAVAGER_GRIEF).error(exception));
+			MobGriefControl.reporter.reportDetailed(plugin,
+					Report.newBuilder(PluginLibrary.ERROR_HANDLING_RAVAGER_GRIEF).error(exception));
 		}
 	}
 }
