@@ -1,0 +1,29 @@
+# Migration template to 2.0.0
+# Uses Jinja-like syntax: {{ old.key | default(value) }}
+# This migrates old "grief" naming to descriptive action names
+
+version: "2.0.0"
+
+template: |
+  # MobGriefControl Configuration
+  version: "2.0.0"
+
+  # Common settings
+  debug: {{ old.debug | default(false) }}
+  lang: {{ old.lang | default("en_US") }}
+
+  # Mob behavior controls (renamed from old "grief" naming to descriptive actions)
+  do_enderman_pickup: {{ old.do_enderman_grief | default(true) }}
+  do_creeper_explode: {{ old.do_creeper_grief | default(true) }}
+  do_ghast_explode: {{ old.do_ghast_grief | default(true) }}
+  do_wither_explode: {{ old.do_wither_grief | default(true) }}
+  do_dragon_destroy: {{ old.do_dragon_grief | default(true) }}
+  do_zombie_break_doors: {{ old.do_zombie_door_break | default(true) }}
+  do_villager_farm: {{ old.do_villager_farming | default(true) }}
+  do_sheep_eat_grass: {{ old.do_sheep_eat_grass | default(true) }}
+  do_rabbit_eat_crops: {{ old.do_rabbit_eat_crops | default(true) }}
+  do_fox_pickup_items: {{ old.do_fox_pickup | default(true) }}
+  do_snowgolem_snow_trail: {{ old.do_snowgolem_trail | default(true) }}
+  do_silverfish_infest_blocks: {{ old.do_silverfish_blocks | default(true) }}
+  do_ravager_destroy_crops: {{ old.do_ravager_grief | default(true) }}
+  do_endcrystal_explode: {{ old.do_endcrystal_grief | default(true) }}

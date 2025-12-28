@@ -1,6 +1,6 @@
 name: MobGriefControl
 main: com.github.drewburr.mobgriefcontrol.MobGriefControl
-version: 2.0.0
+version: ${version}
 author: drewburr
 api-version: '1.21.11'
 folia-supported: true

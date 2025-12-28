@@ -2,11 +2,6 @@ package com.github.drewburr.mobgriefcontrol;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +29,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import com.github.drewburr.mobgriefcontrol.common.PluginLibrary;
+import com.github.drewburr.mobgriefcontrol.config.ConfigManager;
 import com.github.drewburr.mobgriefcontrol.listeners.CreeperListener;
 import com.github.drewburr.mobgriefcontrol.listeners.EndermanListener;
 import com.github.drewburr.mobgriefcontrol.listeners.GhastListener;
@@ -67,13 +63,13 @@ public class MobGriefControl extends JavaPlugin implements Listener{
 	File langFile;
 	public FileConfiguration lang;
 	YamlConfiguration oldconfig = new YamlConfiguration();
-	String configVersion = "2.0.0";
-	//String langVersion = "2.0.0";
+	String configVersion;
 	Translator lang2;
 	public String jarfilename = this.getFile().getAbsoluteFile().toString();
 	public static DetailedErrorReporter reporter;
 	public static PluginLogger LOGGER;
 	private CommandManager commandManager;
+	private ConfigManager configManager;
 
 	@Override // TODO: onEnable
 	public void onEnable(){
@@ -85,6 +81,7 @@ public class MobGriefControl extends JavaPlugin implements Listener{
 		lang2 = new Translator(daLang, getDataFolder().toString());
 		THIS_NAME = this.getPluginMeta().getName();
 		THIS_VERSION = this.getPluginMeta().getVersion();
+		configVersion = THIS_VERSION; // Use plugin version for config versioning
 
 		LOGGER = new PluginLogger(this);
 
@@ -103,85 +100,9 @@ public class MobGriefControl extends JavaPlugin implements Listener{
 
 		LOGGER.log("Checking lang files...");
 
-		LOGGER.log("Checking config file...");
-		/**  Check for config */
-		try{
-			if(!getDataFolder().exists()){
-				LOGGER.log("Data Folder doesn't exist");
-				LOGGER.log("Creating Data Folder");
-				getDataFolder().mkdirs();
-				LOGGER.log("Data Folder Created at " + getDataFolder());
-			}
-			File  file = new File(getDataFolder(), "config.yml");
-			LOGGER.log("" + file);
-			if(!file.exists()){
-				LOGGER.log("config.yml not found, creating!");
-				saveResource("config.yml", true);
-			}
-		}catch(Exception exception){
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_CHECK_CONFIG).error(exception));
-		}
-		LOGGER.log("Checking config file version...");
-		String checkconfigversion = getConfig().getString("version", "1.0.0");
-		LOGGER.log("Config file version=" + checkconfigversion + " expected=" + configVersion);
-		if(checkconfigversion != null){
-			if(!checkconfigversion.equalsIgnoreCase(configVersion)){
-				try {
-				copyFile_Java7(getDataFolder() + "" + File.separatorChar + "config.yml",getDataFolder() + "" + File.separatorChar + "old_config.yml");
-				} catch (Exception exception) {
-					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_COPY_FILE).error(exception));
-				}
-				try {
-					oldconfig.load(new File(getDataFolder(), "config.yml"));
-				} catch (Exception exception) {
-					LOGGER.warn("Could not load config.yml");
-					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
-				}
-				saveResource("config.yml", true);
-				try {
-					getConfig().load(new File(getDataFolder(), "config.yml"));
-				} catch (Exception exception) {
-					LOGGER.warn("Could not load config.yml");
-					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
-				}
-				try {
-					oldconfig.load(new File(getDataFolder(), "old_config.yml"));
-				} catch (Exception exception) {
-					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
-				}
-				getConfig().set("debug", oldconfig.get("debug", false));
-				getConfig().set("lang", oldconfig.get("lang", "en_US"));
-				// Migrate old keys to new descriptive names
-				getConfig().set("do_enderman_pickup", oldconfig.get("do_enderman_grief", true));
-				getConfig().set("do_creeper_explode", oldconfig.get("do_creeper_grief", true));
-				getConfig().set("do_ghast_explode", oldconfig.get("do_ghast_grief", true));
-				getConfig().set("do_wither_explode", oldconfig.get("do_wither_grief", true));
-				getConfig().set("do_dragon_destroy", oldconfig.get("do_dragon_grief", true));
-				getConfig().set("do_zombie_break_doors", oldconfig.get("do_zombie_door_break", true));
-				getConfig().set("do_villager_farm", oldconfig.get("do_villager_farming", true));
-				getConfig().set("do_sheep_eat_grass", oldconfig.get("do_sheep_eat_grass", true));
-				getConfig().set("do_rabbit_eat_crops", oldconfig.get("do_rabbit_eat_crops", true));
-				getConfig().set("do_fox_pickup_items", oldconfig.get("do_fox_pickup", true));
-				getConfig().set("do_snowgolem_snow_trail", oldconfig.get("do_snowgolem_trail", true));
-				getConfig().set("do_silverfish_infest_blocks", oldconfig.get("do_silverfish_blocks", true));
-				getConfig().set("do_ravager_destroy_crops", oldconfig.get("do_ravager_grief", true));
-				getConfig().set("do_endcrystal_explode", oldconfig.get("do_endcrystal_grief", true));
-				try {
-					getConfig().save(new File(getDataFolder(), "config.yml"));
-				} catch (Exception exception) {
-					LOGGER.warn("Could not save old settings to config.yml");
-					reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_SAVE_CONFIG).error(exception));
-				}
-				LOGGER.log("config.yml has been updated");
-			}
-		}
-		/** end config check */
-		try {
-getConfig().load(new File(getDataFolder(), "config.yml"));
-			} catch (Exception exception) {
-				LOGGER.warn("Could not load config.yml");
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_LOAD_CONFIG).error(exception));
-		}
+		// Initialize configuration
+		configManager = new ConfigManager(this);
+		configManager.initialize();
 
 		if(debug){
 			LOGGER.debug("Config.yml dump");
@@ -241,6 +162,10 @@ getConfig().load(new File(getDataFolder(), "config.yml"));
 		LOGGER.log(string);
 	}
 
+	public ConfigManager getConfigManager() {
+		return configManager;
+	}
+
 	// Enderman event handler moved to EndermanListener
 
 	// Creeper and Ghast explosion handlers moved to CreeperListener and GhastListener
@@ -281,37 +206,6 @@ getConfig().load(new File(getDataFolder(), "config.yml"));
 			return false;
 		}
 		return false;
-	}
-
-	public void copyFile_Java7(String origin, String destination) throws IOException {
-		try {
-			Path FROM = Paths.get(origin);
-			Path TO = Paths.get(destination);
-			//overwrite the destination file if it exists, and copy
-			// the file attributes, including the rwx permissions
-			CopyOption[] options = new CopyOption[]{
-					StandardCopyOption.REPLACE_EXISTING,
-					StandardCopyOption.COPY_ATTRIBUTES
-			};
-			Files.copy(FROM, TO, options);
-		} catch (Exception exception) {
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_COPY_FILE).error(exception));
-		}
-	}
-
-	@Override
-	public void saveConfig(){
-		try {
-			getConfig().save(new File(getDataFolder(), "config.yml"));
-		} catch (Exception exception) {
-			LOGGER.warn("Could not save old settings to config.yml");
-			reporter.reportDetailed(this, Report.newBuilder(PluginLibrary.REPORT_CANNOT_SAVE_CONFIG).error(exception));
-		}
-	}
-
-	public boolean isCorrectVersion(){
-		// NMS version checking removed - always return true for Paper API compatibility
-		return true;
 	}
 
 	public String LoadTime(long startTime) {
